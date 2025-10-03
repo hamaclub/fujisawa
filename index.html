@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>藤沢市防災ゲームアプリ</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>藤沢市防災ゲーム</span>
+            </div>
+            <div class="user-info">
+                <div class="level-badge">
+                    <i class="fas fa-star"></i>
+                    <span>レベル 5</span>
+                </div>
+                <div class="points">
+                    <i class="fas fa-gem"></i>
+                    <span>1,250 ポイント</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ヒーローセクション -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>防災マスターになろう！</h1>
+                <p>楽しく学んで、いざという時に備えよう</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-fire"></i>
+                        <span>連続正解: 12回</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>獲得バッジ: 8個</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- メニューカード -->
+        <section class="menu-section">
+            <div class="menu-grid">
+                <!-- クイズカード -->
+                <div class="menu-card quiz-card" onclick="openQuiz()">
+                    <div class="card-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>防災クイズ</h3>
+                    <p>4択問題で防災知識をチェック！</p>
+                    <div class="card-stats">
+                        <span><i class="fas fa-play"></i> 15問</span>
+                        <span><i class="fas fa-clock"></i> 5分</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 60%"></div>
+                    </div>
+                </div>
+
+                <!-- 動画カード -->
+                <div class="menu-card video-card" onclick="openVideos()">
+                    <div class="card-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <h3>防災動画</h3>
+                    <p>分かりやすい動画で学習</p>
+                    <div class="card-stats">
+                        <span><i class="fas fa-video"></i> 8本</span>
+                        <span><i class="fas fa-clock"></i> 30分</span>
+                    </div>
+                </div>
+
+                <!-- AR体験カード -->
+                <div class="menu-card ar-card" onclick="openAR()">
+                    <div class="card-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3>AR体験</h3>
+                    <p>ARで災害を疑似体験</p>
+                    <div class="card-stats">
+                        <span><i class="fas fa-mobile-alt"></i> AR対応</span>
+                        <span><i class="fas fa-eye"></i> 3D体験</span>
+                    </div>
+                </div>
+
+                <!-- 藤沢市事例カード -->
+                <div class="menu-card case-card" onclick="openCases()">
+                    <div class="card-icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <h3>藤沢市の取り組み</h3>
+                    <p>地域の防災事例を紹介</p>
+                    <div class="card-stats">
+                        <span><i class="fas fa-map-marker-alt"></i> 藤沢市</span>
+                        <span><i class="fas fa-info-circle"></i> 事例紹介</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 今日のミッション -->
+        <section class="mission-section">
+            <h2>今日のミッション</h2>
+            <div class="mission-card">
+                <div class="mission-content">
+                    <div class="mission-icon">
+                        <i class="fas fa-target"></i>
+                    </div>
+                    <div class="mission-text">
+                        <h3>防災クイズを3問正解しよう</h3>
+                        <p>地震の基礎知識を学ぼう</p>
+                    </div>
+                    <div class="mission-progress">
+                        <span>2/3</span>
+                    </div>
+                </div>
+                <div class="mission-reward">
+                    <i class="fas fa-gem"></i>
+                    <span>+50 ポイント</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ランキング -->
+        <section class="ranking-section">
+            <h2>週間ランキング</h2>
+            <div class="ranking-list">
+                <div class="ranking-item">
+                    <div class="rank">1</div>
+                    <div class="player-info">
+                        <div class="player-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="player-details">
+                            <span class="player-name">防災マスター</span>
+                            <span class="player-points">2,450 ポイント</span>
+                        </div>
+                    </div>
+                    <div class="rank-badge gold">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                </div>
+                <div class="ranking-item">
+                    <div class="rank">2</div>
+                    <div class="player-info">
+                        <div class="player-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="player-details">
+                            <span class="player-name">安全太郎</span>
+                            <span class="player-points">2,100 ポイント</span>
+                        </div>
+                    </div>
+                    <div class="rank-badge silver">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                </div>
+                <div class="ranking-item">
+                    <div class="rank">3</div>
+                    <div class="player-info">
+                        <div class="player-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="player-details">
+                            <span class="player-name">備えちゃん</span>
+                            <span class="player-points">1,850 ポイント</span>
+                        </div>
+                    </div>
+                    <div class="rank-badge bronze">
+                        <i class="fas fa-award"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ナビゲーション -->
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>ホーム</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>クイズ</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-play-circle"></i>
+            <span>動画</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-cube"></i>
+            <span>AR</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>プロフィール</span>
+        </div>
+    </nav>
+
+    <!-- クイズモーダル -->
+    <div id="quizModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>防災クイズ</h2>
+                <button class="close-btn" onclick="closeQuiz()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="quiz-content">
+                <div class="quiz-progress">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 20%"></div>
+                    </div>
+                    <span>問題 1 / 5</span>
+                </div>
+                <div class="question">
+                    <h3>地震が発生した時、最初に取るべき行動は？</h3>
+                </div>
+                <div class="options">
+                    <button class="option-btn">すぐに外に逃げる</button>
+                    <button class="option-btn">机の下に隠れる</button>
+                    <button class="option-btn">火を消す</button>
+                    <button class="option-btn">家族に連絡する</button>
+                </div>
+                <div class="quiz-timer">
+                    <i class="fas fa-clock"></i>
+                    <span>残り時間: 30秒</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
