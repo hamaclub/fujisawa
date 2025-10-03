@@ -1,402 +1,973 @@
-// アプリのメイン機能
-class DisasterPreventionApp {
-    constructor() {
-        this.currentUser = {
-            level: 5,
-            points: 1250,
-            streak: 12,
-            badges: 8
-        };
-        
-        this.quizData = [
-            {
-                question: "地震が発生した時、最初に取るべき行動は？",
-                options: [
-                    "すぐに外に逃げる",
-                    "机の下に隠れる",
-                    "火を消す",
-                    "家族に連絡する"
-                ],
-                correct: 1,
-                explanation: "地震の際は、まず身の安全を確保することが最優先です。机の下に隠れて頭を守りましょう。"
-            },
-            {
-                question: "避難所で生活する際、最も重要なことは？",
-                options: [
-                    "快適な環境を作る",
-                    "地域の人々と協力する",
-                    "個人のプライバシーを守る",
-                    "規則を守る"
-                ],
-                correct: 1,
-                explanation: "避難所では多くの人が共同生活を送るため、地域の人々と協力することが重要です。"
-            },
-            {
-                question: "台風が接近している時、事前に準備すべきものは？",
-                options: [
-                    "非常食と水",
-                    "懐中電灯と電池",
-                    "ラジオ",
-                    "すべて"
-                ],
-                correct: 3,
-                explanation: "台風対策では、非常食、水、懐中電灯、電池、ラジオなど、すべての防災用品を準備することが重要です。"
-            }
-        ];
-        
-        this.init();
+/* リセットとベーススタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    overflow-x: hidden;
+}
+
+/* マスコットキャラクターのスタイル */
+.mascot-character {
+    position: relative;
+    display: inline-block;
+}
+
+.mascot-head {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    background: #4a9eff;
+    border-radius: 50%;
+    border: 3px solid white;
+}
+
+.mascot-head.mini {
+    width: 40px;
+    height: 40px;
+}
+
+.mascot-head.avatar {
+    width: 50px;
+    height: 50px;
+}
+
+.mascot-ears {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 20px solid #4a9eff;
+    border-radius: 50%;
+}
+
+.mascot-ears::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: -12px;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 15px solid white;
+}
+
+.mascot-face {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+}
+
+.mascot-eyes {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+}
+
+.eye {
+    width: 8px;
+    height: 8px;
+    background: black;
+    border-radius: 50%;
+}
+
+.mascot-mouth {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 10px;
+    border: 2px solid black;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+}
+
+.mascot-cheeks {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 20px;
+}
+
+.cheek {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #ff69b4;
+    border-radius: 50%;
+}
+
+.cheek.left {
+    left: -10px;
+}
+
+.cheek.right {
+    right: -10px;
+}
+
+.mascot-hat {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 30px;
+}
+
+.hat-base {
+    width: 100%;
+    height: 20px;
+    background: #8b4513;
+    border-radius: 10px;
+}
+
+.hat-tower {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 25px;
+    background: linear-gradient(to bottom, #666, #999);
+    border-radius: 2px;
+}
+
+.hat-tower::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -2px;
+    width: 19px;
+    height: 8px;
+    background: #333;
+    border-radius: 50%;
+}
+
+.mascot-body {
+    position: relative;
+    width: 100px;
+    height: 80px;
+    background: #4a9eff;
+    border-radius: 50px;
+    margin-top: -10px;
+}
+
+.mascot-belly {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 50px;
+    background: white;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mascot-text {
+    font-size: 8px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.mascot-arms {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 20px;
+}
+
+.arm {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    background: #4a9eff;
+    border-radius: 10px;
+}
+
+.arm.left {
+    left: -10px;
+    top: 10px;
+}
+
+.arm.right {
+    right: -10px;
+    top: 10px;
+}
+
+.mascot-legs {
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 30px;
+}
+
+.leg {
+    position: absolute;
+    width: 25px;
+    height: 40px;
+    background: #4a9eff;
+    border-radius: 12px;
+}
+
+.leg.left {
+    left: 5px;
+}
+
+.leg.right {
+    right: 5px;
+}
+
+.mascot-tail {
+    position: absolute;
+    top: 60px;
+    right: -15px;
+    width: 20px;
+    height: 20px;
+    background: #ff69b4;
+    border-radius: 50%;
+    transform: rotate(45deg);
+}
+
+/* サイズバリエーション */
+.mascot-character.guide-size {
+    transform: scale(0.8);
+}
+
+.mascot-character.mission-size {
+    transform: scale(0.6);
+}
+
+.mascot-character.quiz-size {
+    transform: scale(0.5);
+}
+
+/* ヘッダー */
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #4a5568;
+}
+
+.mascot-logo {
+    transform: scale(0.6);
+}
+
+.user-info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.level-badge, .points {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #f7fafc;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.level-badge i {
+    color: #f6ad55;
+}
+
+.points i {
+    color: #4299e1;
+}
+
+/* メインコンテンツ */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* ヒーローセクション */
+.hero-section {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.hero-mascot {
+    flex: 0 0 auto;
+}
+
+.hero-text {
+    flex: 1;
+    min-width: 300px;
+}
+
+.hero-text h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-text p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.stat-item i {
+    font-size: 1.2rem;
+}
+
+/* ガイドセクション */
+.guide-section {
+    margin-bottom: 3rem;
+}
+
+.guide-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.guide-mascot {
+    flex: 0 0 auto;
+}
+
+.guide-text h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.guide-text p {
+    color: #718096;
+    line-height: 1.6;
+}
+
+/* メニューセクション */
+.menu-section {
+    margin-bottom: 3rem;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.menu-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.menu-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.quiz-card .card-icon i {
+    color: #4299e1;
+}
+
+.video-card .card-icon i {
+    color: #e53e3e;
+}
+
+.ar-card .card-icon i {
+    color: #38a169;
+}
+
+.case-card .card-icon i {
+    color: #d69e2e;
+}
+
+.menu-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2d3748;
+}
+
+.menu-card p {
+    color: #718096;
+    margin-bottom: 1.5rem;
+}
+
+.card-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #a0aec0;
+}
+
+.card-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, #4299e1, #667eea);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.card-mascot {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0.7;
+}
+
+.mini-mascot {
+    transform: scale(0.4);
+}
+
+/* ミッションセクション */
+.mission-section {
+    margin-bottom: 3rem;
+}
+
+.mission-section h2 {
+    color: white;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.mission-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.mission-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mission-mascot {
+    flex: 0 0 auto;
+}
+
+.mission-text h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.mission-text p {
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.mission-progress {
+    background: #f7fafc;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    color: #4299e1;
+}
+
+.mission-reward {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #d69e2e;
+    font-weight: 600;
+}
+
+/* ランキングセクション */
+.ranking-section {
+    margin-bottom: 3rem;
+}
+
+.ranking-section h2 {
+    color: white;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.ranking-list {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ranking-item:last-child {
+    border-bottom: none;
+}
+
+.rank {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4a5568;
+    margin-right: 1rem;
+    min-width: 30px;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.player-avatar {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.player-name {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.player-points {
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.rank-badge {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.rank-badge.gold {
+    background: #f6ad55;
+}
+
+.rank-badge.silver {
+    background: #a0aec0;
+}
+
+.rank-badge.bronze {
+    background: #d69e2e;
+}
+
+/* ボトムナビゲーション */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem 0;
+    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.5rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color: #a0aec0;
+}
+
+.nav-item.active {
+    color: #4299e1;
+    background: #ebf8ff;
+}
+
+.nav-item i {
+    font-size: 1.2rem;
+}
+
+.nav-item span {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #a0aec0;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: #f7fafc;
+    color: #4a5568;
+}
+
+.quiz-content {
+    padding: 1.5rem;
+}
+
+.quiz-mascot {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.quiz-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.quiz-progress .progress-bar {
+    flex: 1;
+    margin-right: 1rem;
+}
+
+.question h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.options {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.option-btn {
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: left;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option-btn:hover {
+    background: #ebf8ff;
+    border-color: #4299e1;
+}
+
+.quiz-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #e53e3e;
+    font-weight: 600;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
     }
     
-    init() {
-        this.updateUserInfo();
-        this.setupEventListeners();
-        this.loadUserProgress();
+    .hero-text h1 {
+        font-size: 2rem;
     }
     
-    updateUserInfo() {
-        const levelElement = document.querySelector('.level-badge span');
-        const pointsElement = document.querySelector('.points span');
-        
-        if (levelElement) {
-            levelElement.textContent = `レベル ${this.currentUser.level}`;
-        }
-        
-        if (pointsElement) {
-            pointsElement.textContent = `${this.currentUser.points.toLocaleString()} ポイント`;
-        }
+    .menu-grid {
+        grid-template-columns: 1fr;
     }
     
-    setupEventListeners() {
-        // ナビゲーション
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                this.switchTab(e.currentTarget);
-            });
-        });
-        
-        // メニューカード
-        document.querySelectorAll('.menu-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const cardType = e.currentTarget.classList[1];
-                this.handleMenuClick(cardType);
-            });
-        });
-        
-        // クイズオプション
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('option-btn')) {
-                this.handleQuizAnswer(e.target);
-            }
-        });
+    .mission-card {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
     }
     
-    switchTab(navItem) {
-        // アクティブ状態を更新
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        navItem.classList.add('active');
-        
-        // タブに応じた処理
-        const tabName = navItem.querySelector('span').textContent;
-        console.log(`タブ切り替え: ${tabName}`);
+    .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
     }
     
-    handleMenuClick(cardType) {
-        switch(cardType) {
-            case 'quiz-card':
-                this.openQuiz();
-                break;
-            case 'video-card':
-                this.openVideos();
-                break;
-            case 'ar-card':
-                this.openAR();
-                break;
-            case 'case-card':
-                this.openCases();
-                break;
-        }
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
     }
     
-    openQuiz() {
-        const modal = document.getElementById('quizModal');
-        modal.style.display = 'block';
-        this.startQuiz();
+    .user-info {
+        justify-content: center;
     }
     
-    closeQuiz() {
-        const modal = document.getElementById('quizModal');
-        modal.style.display = 'none';
-    }
-    
-    startQuiz() {
-        this.currentQuizIndex = 0;
-        this.quizScore = 0;
-        this.showQuizQuestion();
-    }
-    
-    showQuizQuestion() {
-        const question = this.quizData[this.currentQuizIndex];
-        const questionElement = document.querySelector('.question h3');
-        const optionsContainer = document.querySelector('.options');
-        const progressElement = document.querySelector('.quiz-progress span');
-        const progressBar = document.querySelector('.quiz-progress .progress');
-        
-        // 問題文を更新
-        questionElement.textContent = question.question;
-        
-        // 進捗を更新
-        const progress = ((this.currentQuizIndex + 1) / this.quizData.length) * 100;
-        progressElement.textContent = `問題 ${this.currentQuizIndex + 1} / ${this.quizData.length}`;
-        progressBar.style.width = `${progress}%`;
-        
-        // 選択肢を更新
-        optionsContainer.innerHTML = '';
-        question.options.forEach((option, index) => {
-            const button = document.createElement('button');
-            button.className = 'option-btn';
-            button.textContent = option;
-            button.dataset.index = index;
-            optionsContainer.appendChild(button);
-        });
-        
-        // タイマーを開始
-        this.startQuizTimer();
-    }
-    
-    startQuizTimer() {
-        let timeLeft = 30;
-        const timerElement = document.querySelector('.quiz-timer span');
-        
-        this.timerInterval = setInterval(() => {
-            timeLeft--;
-            timerElement.textContent = `残り時間: ${timeLeft}秒`;
-            
-            if (timeLeft <= 0) {
-                this.handleQuizTimeout();
-            }
-        }, 1000);
-    }
-    
-    handleQuizAnswer(selectedButton) {
-        clearInterval(this.timerInterval);
-        
-        const selectedIndex = parseInt(selectedButton.dataset.index);
-        const correctIndex = this.quizData[this.currentQuizIndex].correct;
-        
-        // 正解・不正解の表示
-        const options = document.querySelectorAll('.option-btn');
-        options.forEach((option, index) => {
-            option.disabled = true;
-            if (index === correctIndex) {
-                option.style.background = '#c6f6d5';
-                option.style.borderColor = '#38a169';
-            } else if (index === selectedIndex && selectedIndex !== correctIndex) {
-                option.style.background = '#fed7d7';
-                option.style.borderColor = '#e53e3e';
-            }
-        });
-        
-        if (selectedIndex === correctIndex) {
-            this.quizScore++;
-            this.showCorrectAnswer();
-        } else {
-            this.showIncorrectAnswer();
-        }
-        
-        // 次の問題へ
-        setTimeout(() => {
-            this.nextQuizQuestion();
-        }, 2000);
-    }
-    
-    handleQuizTimeout() {
-        clearInterval(this.timerInterval);
-        this.showIncorrectAnswer();
-        
-        setTimeout(() => {
-            this.nextQuizQuestion();
-        }, 2000);
-    }
-    
-    showCorrectAnswer() {
-        // 正解時のフィードバック
-        console.log('正解！');
-    }
-    
-    showIncorrectAnswer() {
-        // 不正解時のフィードバック
-        console.log('不正解...');
-    }
-    
-    nextQuizQuestion() {
-        this.currentQuizIndex++;
-        
-        if (this.currentQuizIndex < this.quizData.length) {
-            this.showQuizQuestion();
-        } else {
-            this.finishQuiz();
-        }
-    }
-    
-    finishQuiz() {
-        const score = this.quizScore;
-        const total = this.quizData.length;
-        const percentage = Math.round((score / total) * 100);
-        
-        // スコアに応じてポイントを追加
-        const pointsEarned = score * 50;
-        this.currentUser.points += pointsEarned;
-        this.updateUserInfo();
-        
-        // 結果表示
-        alert(`クイズ完了！\n正解数: ${score}/${total} (${percentage}%)\n獲得ポイント: ${pointsEarned}`);
-        
-        this.closeQuiz();
-    }
-    
-    openVideos() {
-        // 動画コンテンツの表示
-        console.log('動画コンテンツを開く');
-        this.showVideoList();
-    }
-    
-    showVideoList() {
-        const videos = [
-            {
-                title: "地震の基礎知識",
-                duration: "5:30",
-                thumbnail: "📹",
-                description: "地震が発生する仕組みと基本的な対策について学びましょう"
-            },
-            {
-                title: "避難所での生活",
-                duration: "8:15",
-                thumbnail: "🏠",
-                description: "避難所での生活のポイントとマナーについて"
-            },
-            {
-                title: "台風対策",
-                duration: "6:45",
-                thumbnail: "🌀",
-                description: "台風が来る前に準備すべきこと"
-            }
-        ];
-        
-        // 動画リストの表示（実際の実装では別のモーダルやページに表示）
-        console.log('動画リスト:', videos);
-    }
-    
-    openAR() {
-        // AR体験の開始
-        console.log('AR体験を開始');
-        this.checkARSupport();
-    }
-    
-    checkARSupport() {
-        if ('xr' in navigator) {
-            console.log('AR対応デバイスです');
-            this.startARExperience();
-        } else {
-            alert('このデバイスはARに対応していません。スマートフォンでお試しください。');
-        }
-    }
-    
-    startARExperience() {
-        // AR体験の実装（実際のARライブラリを使用）
-        console.log('AR体験を開始します');
-    }
-    
-    openCases() {
-        // 藤沢市の防災事例紹介
-        console.log('藤沢市の防災事例を表示');
-        this.showFujisawaCases();
-    }
-    
-    showFujisawaCases() {
-        const cases = [
-            {
-                title: "藤沢市の防災訓練",
-                description: "地域住民と連携した防災訓練の取り組み",
-                image: "🏃‍♂️",
-                date: "2024年3月"
-            },
-            {
-                title: "避難所運営マニュアル",
-                description: "効率的な避難所運営のためのマニュアル作成",
-                image: "📋",
-                date: "2024年2月"
-            },
-            {
-                title: "防災アプリの活用",
-                description: "市民向け防災情報アプリの導入事例",
-                image: "📱",
-                date: "2024年1月"
-            }
-        ];
-        
-        console.log('藤沢市の事例:', cases);
-    }
-    
-    loadUserProgress() {
-        // ユーザーの進捗を読み込み
-        const savedProgress = localStorage.getItem('disasterPreventionProgress');
-        if (savedProgress) {
-            const progress = JSON.parse(savedProgress);
-            this.currentUser = { ...this.currentUser, ...progress };
-            this.updateUserInfo();
-        }
-    }
-    
-    saveUserProgress() {
-        // ユーザーの進捗を保存
-        localStorage.setItem('disasterPreventionProgress', JSON.stringify(this.currentUser));
+    .guide-card {
+        flex-direction: column;
+        text-align: center;
     }
 }
 
-// グローバル関数（HTMLから呼び出し用）
-function openQuiz() {
-    app.openQuiz();
-}
-
-function closeQuiz() {
-    app.closeQuiz();
-}
-
-function openVideos() {
-    app.openVideos();
-}
-
-function openAR() {
-    app.openAR();
-}
-
-function openCases() {
-    app.openCases();
-}
-
-// アプリの初期化
-const app = new DisasterPreventionApp();
-
-// ページ読み込み完了時の処理
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('防災ゲームアプリが読み込まれました');
+@media (max-width: 480px) {
+    .main-content {
+        padding: 1rem 0.5rem;
+    }
     
-    // アニメーション効果
-    const cards = document.querySelectorAll('.menu-card');
-    cards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
-    });
-});
+    .menu-card {
+        padding: 1.5rem;
+    }
+    
+    .hero-text h1 {
+        font-size: 1.8rem;
+    }
+    
+    .nav-item span {
+        font-size: 0.7rem;
+    }
+    
+    .mascot-character {
+        transform: scale(0.8);
+    }
+}
 
-// ウィンドウリサイズ時の処理
-window.addEventListener('resize', () => {
-    // レスポンシブ対応
-    console.log('画面サイズが変更されました');
-});
+/* アニメーション */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-// ページ離脱時の処理
-window.addEventListener('beforeunload', () => {
-    app.saveUserProgress();
-});
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.menu-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.menu-card:nth-child(1) { animation-delay: 0.1s; }
+.menu-card:nth-child(2) { animation-delay: 0.2s; }
+.menu-card:nth-child(3) { animation-delay: 0.3s; }
+.menu-card:nth-child(4) { animation-delay: 0.4s; }
+
+.mascot-character {
+    animation: bounce 2s infinite;
+}
+
+.mascot-character:hover {
+    animation: bounce 0.5s infinite;
+}
+
+/* アクセシビリティ */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* フォーカス表示 */
+button:focus,
+.menu-card:focus {
+    outline: 3px solid #4299e1;
+    outline-offset: 2px;
+}
+
+/* ハイコントラストモード対応 */
+@media (prefers-contrast: high) {
+    .menu-card {
+        border: 2px solid #000;
+    }
+    
+    .option-btn {
+        border-width: 3px;
+    }
+}
