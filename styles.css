@@ -13,273 +13,57 @@ body {
     overflow-x: hidden;
 }
 
-/* マスコットキャラクターのスタイル */
-.mascot-character {
-    position: relative;
-    display: inline-block;
+/* マスコット画像のスタイル */
+.mascot-image {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.mascot-head {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    background: #4a9eff;
-    border-radius: 50%;
-    border: 3px solid white;
-    z-index: 10;
+.mascot-image:hover {
+    transform: scale(1.05);
 }
 
-.mascot-head.mini {
+/* サイズバリエーション */
+.mascot-logo .mascot-image {
+    width: 60px;
+    height: 60px;
+}
+
+.hero-mascot-img {
+    width: 200px;
+    height: 200px;
+    animation: bounce 2s infinite;
+}
+
+.guide-mascot-img {
+    width: 120px;
+    height: 120px;
+}
+
+.mini-mascot-img {
     width: 40px;
     height: 40px;
+    opacity: 0.7;
 }
 
-.mascot-head.avatar {
+.mission-mascot-img {
+    width: 80px;
+    height: 80px;
+}
+
+.avatar-mascot-img {
     width: 50px;
     height: 50px;
 }
 
-.mascot-ears {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-bottom: 20px solid #4a9eff;
-    z-index: 5;
-}
-
-.mascot-ears::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: -12px;
-    width: 0;
-    height: 0;
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-bottom: 15px solid white;
-}
-
-.mascot-face {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    background: white;
-    border-radius: 50%;
-    z-index: 15;
-}
-
-.mascot-eyes {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 15px;
-}
-
-.eye {
-    width: 8px;
-    height: 8px;
-    background: black;
-    border-radius: 50%;
-}
-
-.mascot-mouth {
-    position: absolute;
-    top: 35px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 10px;
-    border: 2px solid black;
-    border-top: none;
-    border-radius: 0 0 20px 20px;
-}
-
-.mascot-cheeks {
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
+.quiz-mascot-img {
     width: 100px;
-    height: 20px;
-    z-index: 12;
-}
-
-.cheek {
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    background: #ff69b4;
-    border-radius: 50%;
-}
-
-.cheek.left {
-    left: -10px;
-}
-
-.cheek.right {
-    right: -10px;
-}
-
-.mascot-hat {
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 30px;
-    z-index: 8;
-}
-
-.hat-base {
-    width: 100%;
-    height: 20px;
-    background: #8b4513;
-    border-radius: 10px;
-}
-
-.hat-tower {
-    position: absolute;
-    top: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 15px;
-    height: 25px;
-    background: linear-gradient(to bottom, #666, #999);
-    border-radius: 2px;
-}
-
-.hat-tower::before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -2px;
-    width: 19px;
-    height: 8px;
-    background: #333;
-    border-radius: 50%;
-}
-
-.mascot-body {
-    position: relative;
-    width: 100px;
-    height: 80px;
-    background: #4a9eff;
-    border-radius: 50px;
-    margin-top: -10px;
-    z-index: 5;
-}
-
-.mascot-belly {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70px;
-    height: 50px;
-    background: white;
-    border-radius: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 6;
-}
-
-.mascot-text {
-    font-size: 8px;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-    line-height: 1.2;
-}
-
-.mascot-arms {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 20px;
-    z-index: 4;
-}
-
-.arm {
-    position: absolute;
-    width: 20px;
-    height: 30px;
-    background: #4a9eff;
-    border-radius: 10px;
-}
-
-.arm.left {
-    left: -10px;
-    top: 10px;
-}
-
-.arm.right {
-    right: -10px;
-    top: 10px;
-}
-
-.mascot-legs {
-    position: absolute;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 30px;
-    z-index: 4;
-}
-
-.leg {
-    position: absolute;
-    width: 25px;
-    height: 40px;
-    background: #4a9eff;
-    border-radius: 12px;
-}
-
-.leg.left {
-    left: 5px;
-}
-
-.leg.right {
-    right: 5px;
-}
-
-.mascot-tail {
-    position: absolute;
-    top: 60px;
-    right: -15px;
-    width: 20px;
-    height: 20px;
-    background: #ff69b4;
-    border-radius: 50%;
-    transform: rotate(45deg);
-    z-index: 3;
-}
-
-/* サイズバリエーション */
-.mascot-character.guide-size {
-    transform: scale(0.8);
-}
-
-.mascot-character.mission-size {
-    transform: scale(0.6);
-}
-
-.mascot-character.quiz-size {
-    transform: scale(0.5);
+    height: 100px;
+    margin: 0 auto;
+    display: block;
 }
 
 /* ヘッダー */
@@ -308,10 +92,6 @@ body {
     font-size: 1.2rem;
     font-weight: 700;
     color: #4a5568;
-}
-
-.mascot-logo {
-    transform: scale(0.6);
 }
 
 .user-info {
@@ -541,11 +321,6 @@ body {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    opacity: 0.7;
-}
-
-.mini-mascot {
-    transform: scale(0.4);
 }
 
 /* ミッションセクション */
@@ -908,3 +683,69 @@ body {
     .nav-item span {
         font-size: 0.7rem;
     }
+    
+    .hero-mascot-img {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+/* アニメーション */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.menu-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.menu-card:nth-child(1) { animation-delay: 0.1s; }
+.menu-card:nth-child(2) { animation-delay: 0.2s; }
+.menu-card:nth-child(3) { animation-delay: 0.3s; }
+.menu-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* アクセシビリティ */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* フォーカス表示 */
+button:focus,
+.menu-card:focus {
+    outline: 3px solid #4299e1;
+    outline-offset: 2px;
+}
+
+/* ハイコントラストモード対応 */
+@media (prefers-contrast: high) {
+    .menu-card {
+        border: 2px solid #000;
+    }
+    
+    .option-btn {
+        border-width: 3px;
+    }
+}
