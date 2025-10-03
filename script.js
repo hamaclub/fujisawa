@@ -67,6 +67,24 @@ class DisasterPreventionApp {
         }
     }
     
+    loadUserProgress() {
+        // ユーザーの進行状況（連続正解数とバッジ数）をUIに反映
+        const streakElement = document.querySelector('.hero-stats .stat-item i.fa-fire').parentElement.querySelector('span');
+        const badgeElement = document.querySelector('.hero-stats .stat-item i.fa-trophy').parentElement.querySelector('span');
+
+        if (streakElement) {
+            streakElement.textContent = `連続正解: ${this.currentUser.streak}回`;
+        }
+        if (badgeElement) {
+            badgeElement.textContent = `獲得バッジ: ${this.currentUser.badges}個`;
+        }
+        // クイズカードの進捗も初期化時に設定（HTMLの60%に対応）
+        const quizProgress = document.querySelector('.quiz-card .progress');
+        if (quizProgress) {
+             quizProgress.style.width = '60%';
+        }
+    }
+
     setupEventListeners() {
         // ナビゲーション
         document.querySelectorAll('.nav-item').forEach(item => {
@@ -96,6 +114,11 @@ class DisasterPreventionApp {
                 this.mascotInteraction();
             });
         });
+
+        // クイズモーダルのクローズボタン
+        document.querySelector('.close-btn').addEventListener('click', () => {
+            this.closeQuiz();
+        });
     }
     
     setupMascotAnimations() {
@@ -105,7 +128,7 @@ class DisasterPreventionApp {
     
     setupRandomMascotMovements() {
         setInterval(() => {
-            const mascots = document.querySelectorAll('.mascot-image');
+            const mascots = document.querySelectorAll('.mascot-image:not(.hero-mascot-img)'); // ヒーローマスコット以外を対象
             mascots.forEach(mascot => {
                 if (Math.random() < 0.1) { // 10%の確率で動く
                     this.randomMascotMovement(mascot);
@@ -115,7 +138,7 @@ class DisasterPreventionApp {
     }
     
     randomMascotMovement(mascot) {
-        mascot.style.transform = 'scale(1.1) rotate(5deg)';
+        mascot.style.transform = 'scale(1.05) rotate(3deg)'; // 微調整
         setTimeout(() => {
             mascot.style.transform = 'scale(1) rotate(0deg)';
         }, 500);
@@ -139,6 +162,8 @@ class DisasterPreventionApp {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'mascot-message';
         messageDiv.textContent = message;
+        
+        // スタイルはCSS-in-JSではなく、専用のCSSクラスを使うのが望ましいが、今回はインラインスタイルを修正
         messageDiv.style.cssText = `
             position: fixed;
             top: 50%;
@@ -157,7 +182,11 @@ class DisasterPreventionApp {
         document.body.appendChild(messageDiv);
         
         setTimeout(() => {
-            document.body.removeChild(messageDiv);
+            // 吹き出しが消える際に、要素が確実に存在するかチェック
+            const existingMessage = document.querySelector('.mascot-message');
+            if (existingMessage) {
+                document.body.removeChild(existingMessage);
+            }
         }, 3000);
     }
     
@@ -217,6 +246,10 @@ class DisasterPreventionApp {
     closeQuiz() {
         const modal = document.getElementById('quizModal');
         modal.style.display = 'none';
+        // 🌟 修正: モーダルを閉じる際にタイマーを確実に停止
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+        }
     }
     
     startQuiz() {
@@ -231,6 +264,13 @@ class DisasterPreventionApp {
         const optionsContainer = document.querySelector('.options');
         const progressElement = document.querySelector('.quiz-progress span');
         const progressBar = document.querySelector('.quiz-progress .progress');
+
+        // すべてのオプションボタンのスタイルをリセット
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            btn.disabled = false;
+        });
         
         // 問題文を更新
         questionElement.textContent = question.question;
@@ -255,6 +295,11 @@ class DisasterPreventionApp {
     }
     
     startQuizTimer() {
+        // 既存のタイマーをクリアしてから開始
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+        }
+
         let timeLeft = 30;
         const timerElement = document.querySelector('.quiz-timer span');
         
@@ -320,10 +365,20 @@ class DisasterPreventionApp {
         this.showMascotMessage('惜しい！でも大丈夫、一緒に学びましょう！');
     }
     
+    // 🌟 修正: アニメーション終了後にインラインスタイルをリセット
     animateMascotCelebration() {
         const mascots = document.querySelectorAll('.mascot-image');
         mascots.forEach(mascot => {
+            // 元のアニメーションを一時的に保存
+            const originalAnimation = mascot.style.animation;
+            
+            // お祝いアニメーションを適用
             mascot.style.animation = 'bounce 0.5s ease 3';
+            
+            // アニメーション終了後に元に戻す
+            setTimeout(() => {
+                mascot.style.animation = originalAnimation;
+            }, 1500); // 0.5秒のアニメーションを3回繰り返すため1.5秒後にリセット
         });
     }
     
@@ -406,4 +461,49 @@ class DisasterPreventionApp {
         if ('xr' in navigator) {
             console.log('AR対応デバイスです');
             this.startARExperience();
-        } else
+        } else {
+            console.log('AR非対応デバイスです');
+            this.showMascotMessage('このデバイスはARに対応していません。');
+        }
+    }
+
+    startARExperience() {
+        console.log('AR体験を開始しました。');
+    }
+}
+
+// グローバルスコープからアクセスできるようにする
+// HTMLのインラインイベントハンドラが動作するようにする
+const app = new DisasterPreventionApp();
+
+function openQuiz() {
+    app.openQuiz();
+}
+
+function closeQuiz() {
+    app.closeQuiz();
+}
+
+function openVideos() {
+    app.openVideos();
+}
+
+function openAR() {
+    app.openAR();
+}
+
+function openCases() {
+    app.showMascotMessage('藤沢市の取り組みに関するページに移動します。');
+}
+
+// フェードアウトアニメーションのためのCSSキーフレームを追加
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+`;
+document.head.appendChild(style);
