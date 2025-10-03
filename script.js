@@ -116,9 +116,12 @@ class DisasterPreventionApp {
         });
 
         // クイズモーダルのクローズボタン
-        document.querySelector('.close-btn').addEventListener('click', () => {
-            this.closeQuiz();
-        });
+        const closeBtn = document.querySelector('.close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closeQuiz();
+            });
+        }
     }
     
     setupMascotAnimations() {
@@ -128,7 +131,8 @@ class DisasterPreventionApp {
     
     setupRandomMascotMovements() {
         setInterval(() => {
-            const mascots = document.querySelectorAll('.mascot-image:not(.hero-mascot-img)'); // ヒーローマスコット以外を対象
+            // ヒーローマスコット以外を対象
+            const mascots = document.querySelectorAll('.mascot-image:not(.hero-mascot-img)');
             mascots.forEach(mascot => {
                 if (Math.random() < 0.1) { // 10%の確率で動く
                     this.randomMascotMovement(mascot);
@@ -138,7 +142,7 @@ class DisasterPreventionApp {
     }
     
     randomMascotMovement(mascot) {
-        mascot.style.transform = 'scale(1.05) rotate(3deg)'; // 微調整
+        mascot.style.transform = 'scale(1.05) rotate(3deg)';
         setTimeout(() => {
             mascot.style.transform = 'scale(1) rotate(0deg)';
         }, 500);
@@ -365,7 +369,7 @@ class DisasterPreventionApp {
         this.showMascotMessage('惜しい！でも大丈夫、一緒に学びましょう！');
     }
     
-    // 🌟 修正: アニメーション終了後にインラインスタイルをリセット
+    // 🌟 アニメーション終了後にインラインスタイルをリセット
     animateMascotCelebration() {
         const mascots = document.querySelectorAll('.mascot-image');
         mascots.forEach(mascot => {
